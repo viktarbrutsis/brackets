@@ -4,23 +4,30 @@ module.exports = function check(str, bracketsConfig) {
     return false;
   } else {
     for (let i = 0; i < str.length; i ++) {
-      if (str[i] == '(' || str[i] == '{' || str[i] == '[') {
-        stack.push(str[i]);
-        } if (str[i] == '|' && stack[stack.length - 1] !== '|') {
+      for (let j = 0; j < bracketsConfig.length; j++) {
+        if (str[i] == bracketsConfig[j][0] && str[i] !== bracketsConfig[j][1]) {
           stack.push(str[i]);
-        } 
-        else if (str[i] == ')' && stack[stack.length - 1] == '(' || str[i] == '}' && stack[stack.length - 1] == '{' || str[i] == ']' && stack[stack.length - 1] == '[' || str[i] == '|' && stack[stack.length - 1] == '|') {
-          stack.pop();
-        } else if (str[i] == ')' && stack[stack.length - 1] !== '(' || str[i] == '}' && stack[stack.length - 1] !== '{' || str[i] == ']' && stack[stack.length - 1] !== '[') {
-          stack.push(str[i]);
+        } if (str[i] == bracketsConfig[j][0] && str[i] == bracketsConfig[j][1]) {
+          if (str[i] == stack[stack.length - 1]) {
+            stack.pop();
+          } else {
+            stack.push(str[i]);
+          }
+        } if (str[i] == bracketsConfig[j][1] && str[i] !== bracketsConfig[j][0]) {
+            if (stack[stack.length - 1] ==  bracketsConfig[j][0]) {
+              stack.pop();
+            }
         }
+          
+      }
+    }
+         
     }
     if (stack.length == 0) {
       return true;
     } else {
       return false;
     }
-  }
   
 };
 
